@@ -1,0 +1,196 @@
+/* ========================================
+   JavaScript編 専用スタイル
+   テーマカラー：エメラルドグリーン〜電気系
+   ======================================== */
+
+/* タイトル背景 */
+#title-screen {
+  background:
+    radial-gradient(ellipse at center, #0a2a1a 0%, #030d08 80%);
+}
+
+/* 章バッジ */
+.chapter-badge-js {
+  display: inline-block;
+  background: #0a2a1a;
+  border: 2px solid #7dffb3;
+  border-radius: 20px;
+  padding: 4px 16px;
+  font-size: 14px;
+  color: #7dffb3;
+  margin-bottom: 12px;
+  letter-spacing: 0.1em;
+}
+
+/* タイトル文字 */
+.js-title {
+  color: #7dffb3;
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    0 0 30px rgba(125, 255, 179, 0.6);
+}
+.js-subtitle {
+  color: #a8ffcc;
+}
+
+/* JS編ボタン */
+.js-btn {
+  background: #0a2a1a;
+  border-color: #7dffb3;
+  color: #7dffb3;
+}
+.js-btn:hover {
+  background: #0d3d22;
+  box-shadow: 0 6px 0 #000, 0 0 12px rgba(125,255,179,0.3);
+}
+
+/* ステータスバー */
+.js-statusbar {
+  border-bottom-color: #7dffb3;
+  background: #0a1a0e;
+}
+.js-statusbar strong {
+  color: #7dffb3 !important;
+}
+
+/* JS編 レイアウト */
+.js-layout {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* パネルヘッダー */
+.js-panel-header {
+  color: #7dffb3 !important;
+}
+
+/* ラインナンバー付きエディタ */
+.editor-line-wrap {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.line-numbers {
+  width: 36px;
+  background: #030d08;
+  border-right: 1px solid #1a3a20;
+  padding: 14px 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #3a6a45;
+  text-align: right;
+  user-select: none;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* JSエディタ */
+.js-layout #code-editor {
+  flex: 1;
+  background: #030d08;
+  color: #a8ffc0;
+  font-family: 'Courier New', monospace;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 14px 12px;
+  border: none;
+  outline: none;
+  resize: none;
+  tab-size: 2;
+}
+
+/* キーワード強調（疑似的な色分け） */
+.js-layout #code-editor::placeholder {
+  color: #2a4a30;
+}
+
+/* 出力エリア */
+.output-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.output-area {
+  flex: 1;
+  background: #020a04;
+  padding: 14px;
+  overflow-y: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 0;
+}
+
+.output-placeholder {
+  color: #2a4a30;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* 出力行 */
+.output-line {
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(125,255,179,0.06);
+  word-break: break-all;
+}
+.output-line.normal  { color: #a8ffc0; }
+.output-line.error   { color: #ff7d7d; }
+.output-line.success { color: #ffe27a; font-weight: bold; }
+.output-line.info    { color: #7db8ff; }
+
+/* 出力ステータスバー */
+.output-status {
+  padding: 6px 14px;
+  background: #0a1a0e;
+  border-top: 1px solid #1a3a20;
+  font-size: 12px;
+  color: #3a6a45;
+  min-height: 28px;
+}
+.output-status.ok    { color: #7dffb3; }
+.output-status.error { color: #ff7d7d; }
+
+/* メッセージウィンドウ */
+.js-message {
+  border-color: #7dffb3;
+  box-shadow: inset 0 0 0 2px #000, inset 0 0 0 4px #7dffb3;
+}
+
+/* モーダル */
+.js-modal {
+  border-color: #7dffb3;
+  box-shadow: 0 0 40px rgba(125, 255, 179, 0.4);
+}
+.js-modal-title  { color: #7dffb3; }
+.js-reveal-box   { border-color: #7dffb3; }
+.js-reveal-name  { color: #7dffb3 !important; }
+
+/* アニメーション：実行フラッシュ */
+@keyframes runFlash {
+  0%   { background: #0a2a1a; }
+  50%  { background: #0d3d22; }
+  100% { background: #020a04; }
+}
+.output-area.running {
+  animation: runFlash 0.3s ease;
+}
+
+/* スクロールバー（Webkit） */
+.output-area::-webkit-scrollbar { width: 6px; }
+.output-area::-webkit-scrollbar-track  { background: #020a04; }
+.output-area::-webkit-scrollbar-thumb  { background: #1a3a20; border-radius: 3px; }
+#code-editor::-webkit-scrollbar { width: 6px; }
+#code-editor::-webkit-scrollbar-track { background: #030d08; }
+#code-editor::-webkit-scrollbar-thumb { background: #1a3a20; border-radius: 3px; }
+
+/* レスポンシブ */
+@media (max-width: 900px) {
+  .js-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

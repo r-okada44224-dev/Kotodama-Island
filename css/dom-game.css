@@ -1,0 +1,142 @@
+/* ========================================
+   DOM編（第3章）専用スタイル
+   テーマカラー：シアン（そらとみずの まほう）
+   ======================================== */
+
+/* タイトル背景 */
+#title-screen {
+  background:
+    radial-gradient(ellipse at center, #0a1f2e 0%, #030a10 80%);
+}
+
+/* 章バッジ */
+.chapter-badge-dom {
+  display: inline-block;
+  background: #0a1f2e;
+  border: 2px solid #7ad9ff;
+  border-radius: 20px;
+  padding: 4px 16px;
+  font-size: 14px;
+  color: #7ad9ff;
+  margin-bottom: 12px;
+  letter-spacing: 0.1em;
+}
+
+/* タイトル文字 */
+.dom-title {
+  color: #7ad9ff;
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    0 0 30px rgba(122, 217, 255, 0.6);
+}
+.dom-subtitle {
+  color: #b8e9ff;
+}
+
+/* DOM編ボタン */
+.dom-btn {
+  background: #0a1f2e;
+  border-color: #7ad9ff;
+  color: #7ad9ff;
+}
+.dom-btn:hover {
+  background: #0d2d42;
+  box-shadow: 0 6px 0 #000, 0 0 12px rgba(122, 217, 255, 0.3);
+}
+
+/* ステータスバー */
+.dom-statusbar {
+  border-bottom-color: #7ad9ff;
+  background: #0a1620;
+}
+.dom-statusbar strong {
+  color: #7ad9ff !important;
+}
+
+/* レイアウト */
+.dom-layout {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* パネルヘッダー */
+.dom-panel-header {
+  color: #7ad9ff !important;
+}
+
+/* ラインナンバー付きエディタ */
+.editor-line-wrap {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.line-numbers {
+  width: 36px;
+  background: #030a10;
+  border-right: 1px solid #1a3040;
+  padding: 14px 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #3a5a70;
+  text-align: right;
+  user-select: none;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* エディタ */
+.dom-layout #code-editor {
+  flex: 1;
+  background: #030a10;
+  color: #a8e2ff;
+  font-family: 'Courier New', monospace;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 14px 12px;
+  border: none;
+  outline: none;
+  resize: none;
+  tab-size: 2;
+}
+.dom-layout #code-editor::placeholder {
+  color: #2a4a5a;
+}
+
+/* プレビュー（あやつる相手のページ） */
+#preview-frame {
+  flex: 1;
+  width: 100%;
+  background: #fff;
+  border: none;
+}
+
+/* メッセージウィンドウ */
+.dom-message {
+  border-color: #7ad9ff;
+  box-shadow: inset 0 0 0 2px #000, inset 0 0 0 4px #7ad9ff;
+}
+
+/* モーダル */
+.dom-modal {
+  border-color: #7ad9ff;
+  box-shadow: 0 0 40px rgba(122, 217, 255, 0.4);
+}
+.dom-modal-title  { color: #7ad9ff; }
+.dom-reveal-box   { border-color: #7ad9ff; }
+.dom-reveal-name  { color: #7ad9ff !important; }
+
+/* スクロールバー（Webkit） */
+#code-editor::-webkit-scrollbar { width: 6px; }
+#code-editor::-webkit-scrollbar-track { background: #030a10; }
+#code-editor::-webkit-scrollbar-thumb { background: #1a3040; border-radius: 3px; }
+
+/* レスポンシブ */
+@media (max-width: 900px) {
+  .dom-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

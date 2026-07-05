@@ -1,0 +1,123 @@
+/* ========================================
+   CSS編 追加スタイル
+   style.css を引き継ぎつつ CSS編専用の調整
+   ======================================== */
+
+/* CSS編のテーマカラー：紫〜ピンク系 */
+#title-screen {
+  background:
+    radial-gradient(ellipse at center, #2a1547 0%, #080510 80%);
+}
+
+.chapter-badge {
+  display: inline-block;
+  background: #5a2d8a;
+  border: 2px solid #c07aff;
+  border-radius: 20px;
+  padding: 4px 16px;
+  font-size: 14px;
+  color: #c07aff;
+  margin-bottom: 12px;
+  letter-spacing: 0.1em;
+}
+
+.game-title {
+  color: #e8a0ff;
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    0 0 30px rgba(200, 120, 255, 0.5);
+}
+
+.game-subtitle {
+  color: #d8b4ff;
+}
+
+/* タイトルナビリンク */
+.title-nav {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.nav-link {
+  color: #b8c7ff;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px 14px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.nav-link:hover {
+  border-color: #c07aff;
+  color: #e8a0ff;
+}
+
+/* CSS編レイアウト：左右2カラム */
+.css-layout {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* CSSエディタの色 */
+.css-layout .editor-panel #code-editor {
+  color: #ffb3ff;
+  background: #0d0518;
+}
+
+/* パネルヘッダー */
+.css-layout .panel-header {
+  color: #e8a0ff;
+}
+
+/* ステータスバーのクエスト番号 */
+#quest-number, #player-level {
+  color: #e8a0ff !important;
+}
+
+/* モーダルのボーダー色 */
+.modal-content {
+  border-color: #c07aff;
+  box-shadow: 0 0 40px rgba(200, 120, 255, 0.5);
+}
+.modal-title {
+  color: #e8a0ff;
+}
+.reveal-name {
+  color: #e8a0ff;
+}
+
+/* エンディングのボタン群 */
+.ending-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+/* カラープレビューバッジ（色名を視覚的に表示） */
+.color-hint-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  background: #1a1a3a;
+  border-top: 1px solid #333;
+}
+.color-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  title: attr(data-name);
+}
+
+/* レスポンシブ */
+@media (max-width: 900px) {
+  .css-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}

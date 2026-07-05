@@ -1,0 +1,343 @@
+/* ========================================
+   ホーム画面（まなびの地図）スタイル
+   ======================================== */
+
+body {
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse at 20% 30%, #1a1040 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, #0a1a30 0%, transparent 60%),
+    #050816;
+}
+
+/* 星屑アニメーション */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 80%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 75%, rgba(255,255,255,0.3) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ヘッダー */
+.home-header {
+  text-align: center;
+}
+.home-logo {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: clamp(36px, 7vw, 64px);
+  color: #ffe27a;
+  text-shadow:
+    3px 3px 0 #000,
+    0 0 30px rgba(255,226,122,0.5);
+  margin-bottom: 6px;
+}
+.home-tagline {
+  font-size: 18px;
+  color: #b8c7ff;
+  margin-bottom: 20px;
+}
+.home-desc {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #ccc;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 16px 24px;
+}
+
+/* 章の地図 */
+.chapter-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+/* 矢印 */
+.map-arrow {
+  font-size: 28px;
+  color: #ffe27a;
+  margin: 8px 0;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+/* 章カードの共通スタイル */
+.chapter-card {
+  position: relative;
+  width: 100%;
+  background: rgba(10, 14, 40, 0.9);
+  border: 3px solid #fff;
+  border-radius: 12px;
+  padding: 28px;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: block;
+}
+.chapter-card:not(.locked):hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* HTML編 テーマ */
+.html-card {
+  border-color: #ffe27a;
+  box-shadow: 0 0 20px rgba(255,226,122,0.2);
+}
+.html-card:hover {
+  box-shadow: 0 8px 32px rgba(255,226,122,0.4);
+}
+
+/* CSS編 テーマ */
+.css-card {
+  border-color: #c07aff;
+  box-shadow: 0 0 20px rgba(192,122,255,0.2);
+}
+.css-card:hover {
+  box-shadow: 0 8px 32px rgba(192,122,255,0.4);
+}
+
+/* JS編（ロック中） */
+.js-card {
+  border-color: #555;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.lock-icon {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+}
+
+/* バッジ */
+.card-badge {
+  display: inline-block;
+  padding: 3px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  border: 1px solid currentColor;
+}
+.html-card .card-badge { color: #ffe27a; border-color: #ffe27a; }
+.css-card  .card-badge { color: #c07aff; border-color: #c07aff; }
+.js-card   .card-badge { color: #888;    border-color: #888; }
+
+/* カードアイコン */
+.card-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+/* カードタイトル */
+.card-title {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+.html-card .card-title { color: #ffe27a; }
+.css-card  .card-title { color: #e8a0ff; }
+.js-card   .card-title { color: #aaa; }
+
+.card-subtitle {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 18px;
+}
+
+/* スキルリスト */
+.card-skills {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  margin-bottom: 18px;
+}
+.card-skills li {
+  font-size: 13px;
+  color: #ddd;
+}
+
+/* クエスト数 */
+.card-quests {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 14px;
+}
+
+/* スタートボタン風 */
+.card-start {
+  display: inline-block;
+  background: #1a1a3a;
+  border: 2px solid currentColor;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-family: inherit;
+}
+.html-card .card-start { color: #ffe27a; border-color: #ffe27a; }
+.css-card  .card-start { color: #e8a0ff; border-color: #c07aff; }
+.locked-text { color: #666; border-color: #666; cursor: not-allowed; }
+
+/* DOM編カード（第3章・シアン） */
+.dom-card {
+  border-color: #7ad9ff;
+  box-shadow: 0 0 20px rgba(122, 217, 255, 0.2);
+}
+.dom-card:hover {
+  box-shadow: 0 8px 32px rgba(122, 217, 255, 0.4);
+}
+.dom-badge {
+  color: #7ad9ff !important;
+  border-color: #7ad9ff !important;
+}
+.dom-card-title {
+  color: #7ad9ff !important;
+}
+.dom-card-start {
+  color: #7ad9ff !important;
+  border-color: #7ad9ff !important;
+  background: #0a1f2e;
+}
+
+/* クリア進捗バッジ */
+.card-progress {
+  display: inline-block;
+  font-size: 13px;
+  color: #ffe27a;
+  background: rgba(255, 226, 122, 0.08);
+  border: 1px solid rgba(255, 226, 122, 0.5);
+  border-radius: 20px;
+  padding: 3px 14px;
+  margin-bottom: 14px;
+}
+.card-progress.complete {
+  color: #7dffb3;
+  background: rgba(125, 255, 179, 0.08);
+  border-color: rgba(125, 255, 179, 0.5);
+}
+
+/* フッター */
+.home-footer {
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  line-height: 1.8;
+  border-top: 1px solid #333;
+  padding-top: 24px;
+  width: 100%;
+}
+
+/* JavaScript編カード */
+.js-card-open {
+  position: relative;
+  width: 100%;
+  background: rgba(10, 14, 40, 0.9);
+  border: 3px solid #7dffb3;
+  border-radius: 12px;
+  padding: 28px;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: block;
+  box-shadow: 0 0 20px rgba(125,255,179,0.2);
+}
+.js-card-open:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 32px rgba(125,255,179,0.4);
+}
+.js-badge {
+  color: #7dffb3 !important;
+  border-color: #7dffb3 !important;
+}
+.js-card-title {
+  color: #7dffb3 !important;
+}
+.js-card-start {
+  color: #7dffb3 !important;
+  border-color: #7dffb3 !important;
+  display: inline-block;
+  background: #0a2a1a;
+  border: 2px solid #7dffb3;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+/* 本編「Code of History」カード（金・ローマ風） */
+.honhen-card {
+  border-color: #d4a24e;
+}
+.honhen-card.locked {
+  opacity: 0.55;
+  filter: grayscale(0.4);
+  cursor: not-allowed;
+}
+.honhen-card.unlocked {
+  box-shadow: 0 0 24px rgba(212, 162, 78, 0.35);
+}
+.honhen-card.unlocked:hover {
+  box-shadow: 0 8px 36px rgba(212, 162, 78, 0.55);
+}
+.honhen-badge {
+  color: #ffd98a !important;
+  border-color: #d4a24e !important;
+}
+.honhen-title {
+  color: #ffd98a !important;
+  letter-spacing: 0.06em;
+}
+.honhen-message {
+  font-size: 14px;
+  color: #d8c9a8;
+  line-height: 1.8;
+  margin: 12px 0 16px;
+}
+.honhen-start {
+  color: #ffd98a !important;
+  border-color: #d4a24e !important;
+  display: inline-block;
+  background: #2a1f0a;
+  border: 2px solid #d4a24e;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+/* レスポンシブ */
+@media (max-width: 500px) {
+  .card-skills {
+    grid-template-columns: 1fr;
+  }
+  .home-wrap {
+    padding: 24px 12px 40px;
+  }
+}

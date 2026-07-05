@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ことだまの島 ～HTMLはじまりの章～</title>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Yusei+Magic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- タイトル画面 -->
+  <section id="title-screen" class="screen active">
+    <div class="title-inner">
+      <p class="chapter-badge-html">第0章</p>
+      <h1 class="game-title">ことだまの島</h1>
+      <p class="game-subtitle">～ HTMLはじまりの章 ～</p>
+      <p class="title-desc">
+        あなたは古代図書館の見習い書記。<br>
+        「ことだま」を巻物に刻み、世界を実体化させよ。
+      </p>
+      <button id="start-button" class="dq-button">▶ ぼうけんを はじめる</button>
+      <div class="title-extra-buttons">
+        <button id="continue-save-button" class="dq-button is-hidden">▶ つづきから</button>
+        <button id="training-button" class="dq-button gray is-hidden">🔥 とっくんモード</button>
+      </div>
+      <p class="title-hint">※ 知識ゼロから遊べます ／ すすみぐあいは自動でセーブされます</p>
+      <div class="title-nav" style="margin-top:16px;">
+        <a href="home.html" class="nav-link">🏠 まなびの地図へ</a>
+        <a href="css-game.html" class="nav-link">▶ CSS編へ</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ゲーム本編画面 -->
+  <section id="game-screen" class="screen">
+    <!-- 上部ステータスバー -->
+    <header class="status-bar">
+      <span class="status-item">📜 クエスト <strong id="quest-number">1</strong> / <span id="quest-total">10</span></span>
+      <span class="status-item">⭐ Lv <strong id="player-level">1</strong></span>
+      <span class="status-item quest-title-display">クエスト名：<strong id="quest-title">　</strong></span>
+      <button id="zukan-button" class="dq-button small gray zukan-btn">📖 ずかん</button>
+    </header>
+
+    <!-- メイン2分割エリア -->
+    <main class="main-area">
+      <!-- 左：巻物（エディタ） -->
+      <article class="panel editor-panel">
+        <div class="panel-header">📜 まきもの（ここに ことだまを かく）</div>
+        <textarea id="code-editor" spellcheck="false" autocomplete="off"></textarea>
+        <div class="editor-buttons">
+          <button id="run-button" class="dq-button small">✨ となえる</button>
+          <button id="hint-button" class="dq-button small gray">💡 ヒント</button>
+          <button id="reset-button" class="dq-button small gray">↺ もどす</button>
+        </div>
+      </article>
+
+      <!-- 右：実体化した世界（プレビュー） -->
+      <article class="panel preview-panel">
+        <div class="panel-header">✨ じったいかした せかい</div>
+        <iframe id="preview-frame" title="プレビュー"></iframe>
+      </article>
+    </main>
+
+    <!-- 下部メッセージウィンドウ（ドラクエ風） -->
+    <footer class="message-window">
+      <div class="message-speaker" id="message-speaker">🧙 ことだま の せいれい</div>
+      <div class="message-text" id="message-text">　</div>
+      <button id="next-button" class="next-arrow">▼</button>
+    </footer>
+  </section>
+
+  <!-- クエストクリア用モーダル -->
+  <div id="clear-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 class="modal-title">⭐ クエストクリア！ ⭐</h2>
+      <div class="reveal-box">
+        <p class="reveal-label" id="reveal-label">じつは これは…</p>
+        <p class="reveal-name" id="reveal-name">　</p>
+        <p class="reveal-desc" id="reveal-desc">　</p>
+      </div>
+      <button id="continue-button" class="dq-button">▶ つぎへ すすむ</button>
+    </div>
+  </div>
+
+  <!-- エンディングモーダル（本編クリア） -->
+  <div id="ending-modal" class="modal hidden">
+    <div class="modal-content ending">
+      <h2 class="modal-title">🎉 ぜんクエスト クリア！ 🎉</h2>
+      <p class="ending-text">
+        おめでとう！<br>
+        あなたは「ことだま」の しくみを みにつけた。<br><br>
+        じぶんで かいた まきものを<br>
+        「もちかえる」と、ほんものの HTMLファイルとして<br>
+        じぶんの パソコンで ひらけるぞ！<br><br>
+        ちからだめしを したいなら「とっくんモード」、<br>
+        つぎの まほうを まなぶなら「CSS編」じゃ！
+      </p>
+      <div class="ending-buttons">
+        <button id="download-button" class="dq-button">💾 まきものを もちかえる</button>
+        <button id="ending-training-button" class="dq-button">🔥 とっくんモードへ</button>
+        <a href="css-game.html" class="dq-button" style="display:inline-block;text-decoration:none;">▶ CSS編へ すすむ</a>
+        <button id="restart-button" class="dq-button gray small">↺ もういちど あそぶ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 特訓モードクリアモーダル -->
+  <div id="review-ending-modal" class="modal hidden">
+    <div class="modal-content ending">
+      <h2 class="modal-title">👑 とっくん ぜんもん クリア！ 👑</h2>
+      <p class="ending-text">
+        みごとじゃ…！<br>
+        なにも みずに、まっしろな まきものから<br>
+        ページを つくれるように なった。<br><br>
+        そなたは もう りっぱな「ことだま つかい」。<br>
+        つぎは「いろをぬる まほう（CSS）」で<br>
+        ページを うつくしく かざるのじゃ！
+      </p>
+      <div class="ending-buttons">
+        <a href="css-game.html" class="dq-button" style="display:inline-block;text-decoration:none;">▶ CSS編へ すすむ</a>
+        <button id="review-retry-button" class="dq-button gray small">🔥 もういちど とっくん</button>
+        <button id="review-back-button" class="dq-button gray small">🏠 タイトルへ もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ことだま図鑑モーダル -->
+  <div id="zukan-modal" class="modal hidden">
+    <div class="modal-content zukan-content">
+      <h2 class="modal-title">📖 ことだま図鑑</h2>
+      <p class="zukan-note">クリアした クエストの「ことだま」が ここに きろくされるぞ。</p>
+      <div id="zukan-list" class="zukan-list"></div>
+      <button id="zukan-close-button" class="dq-button gray small">✕ とじる</button>
+    </div>
+  </div>
+
+  <style>
+    .chapter-badge-html {
+      display: inline-block;
+      background: #3a2d08;
+      border: 2px solid #ffe27a;
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 14px;
+      color: #ffe27a;
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+    }
+  </style>
+
+  <script src="js/quests.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

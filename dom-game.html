@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ことだまの島 ～ページを あやつる章～</title>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Yusei+Magic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dom-game.css">
+</head>
+<body>
+
+  <!-- タイトル画面 -->
+  <section id="title-screen" class="screen active">
+    <div class="title-inner">
+      <p class="chapter-badge-dom">第3章</p>
+      <h1 class="game-title dom-title">ページを あやつる章</h1>
+      <p class="game-subtitle dom-subtitle">～ DOMまほうの章 ～</p>
+      <p class="title-desc">
+        HTMLの かたち、CSSの いろ、JavaScriptの うごき。<br>
+        3つの ちからを つなぐ さいごの まほう<br>
+        <strong style="color:#7ad9ff;">「DOM操作」</strong>で、うごくページを つくるのじゃ。
+      </p>
+      <button id="start-button" class="dq-button dom-btn">▶ さいごの しゅぎょうへ</button>
+      <div class="title-extra-buttons">
+        <button id="continue-save-button" class="dq-button dom-btn is-hidden">▶ つづきから</button>
+        <button id="training-button" class="dq-button gray is-hidden">🔥 とっくんモード</button>
+      </div>
+      <p class="title-hint">※ すすみぐあいは自動でセーブされます</p>
+      <div class="title-nav" style="margin-top:16px;">
+        <a href="js-game.html" class="nav-link">◀ JavaScript編に もどる</a>
+        <a href="index.html" class="nav-link">🏠 まなびの地図へ</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ゲーム本編画面 -->
+  <section id="game-screen" class="screen">
+
+    <!-- 上部ステータスバー -->
+    <header class="status-bar dom-statusbar">
+      <span class="status-item">🪄 クエスト <strong id="quest-number">1</strong> / <span id="quest-total">10</span></span>
+      <span class="status-item">⭐ Lv <strong id="player-level">1</strong></span>
+      <span class="status-item quest-title-display">クエスト名：<strong id="quest-title">　</strong></span>
+      <button id="zukan-button" class="dq-button small gray zukan-btn">📖 ずかん</button>
+    </header>
+
+    <!-- メイン2分割エリア（左:JSエディタ / 右:うごくページ） -->
+    <main class="main-area dom-layout">
+
+      <!-- 左：JSエディタ -->
+      <article class="panel editor-panel">
+        <div class="panel-header dom-panel-header">
+          🪄 まほうのスクロール（JavaScriptを かく）
+        </div>
+        <div class="editor-line-wrap">
+          <div id="line-numbers" class="line-numbers"></div>
+          <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+        <div class="editor-buttons">
+          <button id="run-button" class="dq-button small dom-btn">✨ となえる</button>
+          <button id="hint-button" class="dq-button small gray">💡 ヒント</button>
+          <button id="reset-button" class="dq-button small gray">↺ もどす</button>
+        </div>
+      </article>
+
+      <!-- 右：あやつる相手のページ -->
+      <article class="panel preview-panel">
+        <div class="panel-header dom-panel-header">🌐 いきている ページ（さわって ためせる）</div>
+        <iframe id="preview-frame" title="うごくページのプレビュー"></iframe>
+      </article>
+
+    </main>
+
+    <!-- 下部メッセージウィンドウ -->
+    <footer class="message-window dom-message">
+      <div class="message-speaker" id="message-speaker">🧙 ことだま の せいれい</div>
+      <div class="message-text" id="message-text">　</div>
+      <button id="next-button" class="next-arrow">▼</button>
+    </footer>
+  </section>
+
+  <!-- クエストクリア用モーダル -->
+  <div id="clear-modal" class="modal hidden">
+    <div class="modal-content dom-modal">
+      <h2 class="modal-title dom-modal-title">🪄 クエストクリア！ 🪄</h2>
+      <div class="reveal-box dom-reveal-box">
+        <p class="reveal-label" id="reveal-label">じつは これは…</p>
+        <p class="reveal-name dom-reveal-name" id="reveal-name">　</p>
+        <p class="reveal-desc" id="reveal-desc">　</p>
+      </div>
+      <button id="continue-button" class="dq-button dom-btn">▶ つぎへ すすむ</button>
+    </div>
+  </div>
+
+  <!-- エンディングモーダル -->
+  <div id="ending-modal" class="modal hidden">
+    <div class="modal-content ending dom-modal">
+      <h2 class="modal-title dom-modal-title">🎉 ぜん章 クリア！ 🎉</h2>
+      <p class="ending-text">
+        おめでとう！！<br>
+        HTML・CSS・JavaScript・DOM操作——<br>
+        Webの 4つの ちからを すべて つないだ！<br><br>
+        さいごに つくった「ことだまの メモちょう」は<br>
+        ほんものの アプリじゃ。もちかえって<br>
+        じぶんの パソコンで つかえるぞ。<br><br>
+        ことだまの島の しゅぎょうは これにて かんりょう。<br>
+        ここから さきは、そなたじしんの ぼうけんじゃ！
+      </p>
+      <div class="ending-buttons">
+        <button id="download-button" class="dq-button dom-btn">💾 メモちょうを もちかえる</button>
+        <button id="ending-training-button" class="dq-button dom-btn">🔥 とっくんモードへ（アプリ自作）</button>
+        <a href="index.html" class="dq-button dom-btn" style="display:inline-block;text-decoration:none;">🏠 まなびの地図へ</a>
+        <button id="restart-button" class="dq-button gray small">↺ もういちど あそぶ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 特訓モードクリアモーダル -->
+  <div id="review-ending-modal" class="modal hidden">
+    <div class="modal-content ending dom-modal">
+      <h2 class="modal-title dom-modal-title">👑 とっくん ぜんもん クリア！ 👑</h2>
+      <p class="ending-text">
+        しんじられぬ…！<br>
+        お題だけを みて、白紙から<br>
+        3つの ミニアプリを つくりあげた！<br><br>
+        いいねボタン、あいことばの とびら、<br>
+        こわれない こんだてボード——<br>
+        もう そなたに おしえることは なにもない。<br><br>
+        ここから さきは、じぶんの つくりたいものを<br>
+        つくる ぼうけんじゃ。いってらっしゃい！
+      </p>
+      <div class="ending-buttons">
+        <a href="index.html" class="dq-button dom-btn" style="display:inline-block;text-decoration:none;">🏠 まなびの地図へ</a>
+        <button id="review-retry-button" class="dq-button gray small">🔥 もういちど とっくん</button>
+        <button id="review-back-button" class="dq-button gray small">▶ タイトルへ もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ことだま図鑑モーダル -->
+  <div id="zukan-modal" class="modal hidden">
+    <div class="modal-content zukan-content dom-modal">
+      <h2 class="modal-title dom-modal-title">📖 ことだま図鑑（DOM編）</h2>
+      <p class="zukan-note">クリアした クエストの「ことだま」が ここに きろくされるぞ。</p>
+      <div id="zukan-list" class="zukan-list"></div>
+      <button id="zukan-close-button" class="dq-button gray small">✕ とじる</button>
+    </div>
+  </div>
+
+  <script src="js/dom-quests.js"></script>
+  <script src="js/dom-main.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ことだまの島 ～まなびの地図～</title>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Yusei+Magic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+  <div class="home-wrap">
+
+    <!-- タイトルロゴ -->
+    <header class="home-header">
+      <h1 class="home-logo">ことだまの島</h1>
+      <p class="home-tagline">～ まなびの地図 ～</p>
+      <p class="home-desc">
+        プログラミングを「ことだま」として体験する<br>
+        学習RPGゲームじゃ。<br>
+        好きな章から はじめてごらん。
+      </p>
+    </header>
+
+    <!-- 章選択カード -->
+    <main class="chapter-map">
+
+      <!-- 第0章：HTML編 -->
+      <a href="html-game.html" class="chapter-card html-card">
+        <div class="card-badge">第0章</div>
+        <div class="card-icon">📜</div>
+        <h2 class="card-title">HTMLはじまりの章</h2>
+        <p class="card-subtitle">かたちを つくる ことだま</p>
+        <ul class="card-skills">
+          <li>✅ タグと 属性の しくみ</li>
+          <li>✅ &lt;html&gt; / &lt;head&gt; / &lt;body&gt;</li>
+          <li>✅ &lt;h1&gt; 見出し・&lt;p&gt; 段落</li>
+          <li>✅ &lt;img&gt; 画像・&lt;a&gt; リンク・&lt;ul&gt; リスト</li>
+        </ul>
+        <div class="card-quests">全10クエスト ＋ とっくん3問</div>
+        <div class="card-start">▶ はじめる</div>
+      </a>
+
+      <!-- 矢印 -->
+      <div class="map-arrow">▼</div>
+
+      <!-- 第1章：CSS編 -->
+      <a href="css-game.html" class="chapter-card css-card">
+        <div class="card-badge">第1章</div>
+        <div class="card-icon">🎨</div>
+        <h2 class="card-title">いろをぬる章</h2>
+        <p class="card-subtitle">かざりを つける ことだま</p>
+        <ul class="card-skills">
+          <li>✅ &lt;style&gt; タグの しくみ</li>
+          <li>✅ color / background-color</li>
+          <li>✅ font-size / text-align</li>
+          <li>✅ padding / クラスセレクタ</li>
+        </ul>
+        <div class="card-quests">全8クエスト ＋ とっくん3問</div>
+        <div class="card-start">▶ はじめる</div>
+      </a>
+
+      <!-- 矢印 -->
+      <div class="map-arrow">▼</div>
+
+      <!-- 第2章：JavaScript編 -->
+      <a href="js-game.html" class="chapter-card js-card-open">
+        <div class="card-badge js-badge">第2章</div>
+        <div class="card-icon">⚡</div>
+        <h2 class="card-title js-card-title">うごきを あたえる章</h2>
+        <p class="card-subtitle">いのちを ふきこむ ことだま</p>
+        <ul class="card-skills">
+          <li>✅ 変数（ことだま石）</li>
+          <li>✅ 計算・文字のあつかい</li>
+          <li>✅ if文・forループ</li>
+          <li>✅ 配列・関数（まほうのなまえ）</li>
+        </ul>
+        <div class="card-quests">全10クエスト ＋ とっくん3問</div>
+        <div class="card-start js-card-start">▶ はじめる</div>
+      </a>
+
+      <!-- 矢印 -->
+      <div class="map-arrow">▼</div>
+
+      <!-- 第3章：DOM操作編 -->
+      <a href="dom-game.html" class="chapter-card dom-card">
+        <div class="card-badge dom-badge">第3章</div>
+        <div class="card-icon">🪄</div>
+        <h2 class="card-title dom-card-title">ページを あやつる章</h2>
+        <p class="card-subtitle">3つの ちからを つなぐ ことだま</p>
+        <ul class="card-skills">
+          <li>✅ getElementById・textContent</li>
+          <li>✅ style・classList（CSS連携）</li>
+          <li>✅ addEventListener（ボタンで動く！）</li>
+          <li>✅ ミニアプリ「メモちょう」を 作る</li>
+        </ul>
+        <div class="card-quests">全10クエスト ＋ とっくん3問（アプリ自作）</div>
+        <div class="card-start dom-card-start">▶ はじめる</div>
+      </a>
+
+      <!-- 矢印 -->
+      <div class="map-arrow">▼</div>
+
+      <!-- 本編：Code of History（全4章クリアで解放） -->
+      <a href="../Code of History/index.html" class="chapter-card honhen-card locked" id="honhen-card">
+        <div class="card-badge honhen-badge">本編</div>
+        <div class="card-icon">🏛</div>
+        <h2 class="card-title honhen-title">Code of History</h2>
+        <p class="card-subtitle">あんごうの れきしを かけぬける だいぼうけん</p>
+        <p class="honhen-message" id="honhen-message">🔒 4つの章を すべてクリアすると とびらが ひらく…</p>
+        <div class="card-start honhen-start" id="honhen-start" hidden>▶ 本編へ 旅立つ</div>
+      </a>
+
+    </main>
+
+    <!-- フッターメッセージ -->
+    <footer class="home-footer">
+      <p>💡 わからなくなったら「ヒント」ボタンを つかえるぞ。<br>
+         ゆっくり じぶんのペースで すすんでよいのじゃ。</p>
+    </footer>
+
+  </div>
+
+  <script src="js/home.js"></script>
+</body>
+</html>
