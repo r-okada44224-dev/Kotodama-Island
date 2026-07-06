@@ -78,7 +78,7 @@ function ensureAudio() {
   }
 }
 function beep(freq = 440, duration = 0.08, type = 'square', volume = 0.05) {
-  if (!audioCtx) return;
+  if (!audioCtx || !KOTODAMA.soundOn()) return;
   const osc  = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.type = type;
@@ -118,7 +118,7 @@ function showMessage(text, onComplete) {
     messageText.textContent += ch;
     if (ch !== '\n' && ch !== ' ' && i % 2 === 0) playTypeSound();
     i++;
-  }, 32);
+  }, KOTODAMA.adjustSpeed(32));
 }
 
 function skipTyping() {
@@ -144,7 +144,10 @@ function updatePreview() {
   doc.close();
 }
 
-codeEditor.addEventListener('input', updatePreview);
+codeEditor.addEventListener('input', () => {
+  updatePreview();
+  KOTODAMA.saveDraft('css', state.mode, state.currentQuest, codeEditor.value, questSet()[state.currentQuest].initialCode);
+});
 
 // ----- クエスト開始 -----
 function startQuest(index) {
@@ -158,7 +161,9 @@ function startQuest(index) {
   playerLevel.textContent = state.level;
   messageSpeaker.textContent = '🧙 ことだま の せいれい';
 
-  codeEditor.value = quest.initialCode;
+  // エディタを初期化（書きかけの下書きがあれば復元）
+  const draft = KOTODAMA.loadDraft('css', state.mode, index);
+  codeEditor.value = draft || quest.initialCode;
   codeEditor.placeholder = quest.placeholder || '';
   updatePreview();
 
@@ -202,6 +207,8 @@ function castSpell() {
 
   if (quest.check(code)) {
     recordClear(state.currentQuest);
+    KOTODAMA.recordSuccess('css', state.mode, state.currentQuest);
+    KOTODAMA.clearDraft('css', state.mode, state.currentQuest);
     setTimeout(() => playSuccessSound(), 100);
     messageSpeaker.textContent = '🧙 ことだま の せいれい';
     showMessage(quest.successMessage, () => {
@@ -211,10 +218,11 @@ function castSpell() {
     playErrorSound();
     messageSpeaker.textContent = '🧙 ことだま の せいれい';
     const problem = quest.diagnose ? quest.diagnose(code) : null;
+    const cheer = KOTODAMA.recordMistake('css', state.mode, state.currentQuest, quest.title);
     if (problem) {
-      showMessage("むむ… " + problem + "\n（こまったら「💡 ヒント」じゃ）");
+      showMessage("むむ… " + problem + "\n（こまったら「💡 ヒント」じゃ）" + cheer);
     } else {
-      showMessage("むむ… まだ CSSのまほうが\nととのっておらんようじゃ。\n「💡 ヒント」を みてみるのじゃ。");
+      showMessage("むむ… まだ CSSのまほうが\nととのっておらんようじゃ。\n「💡 ヒント」を みてみるのじゃ。" + cheer);
     }
   }
 }

@@ -82,7 +82,7 @@ function ensureAudio() {
   }
 }
 function beep(freq = 440, duration = 0.08, type = 'square', volume = 0.05) {
-  if (!audioCtx) return;
+  if (!audioCtx || !KOTODAMA.soundOn()) return;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.type = type;
@@ -113,7 +113,7 @@ function showMessage(text, onComplete) {
   nextButton.classList.add('hidden');
 
   let i = 0;
-  const speed = 35; // ms/文字
+  const speed = KOTODAMA.adjustSpeed(35); // ms/文字（せっていで かわる）
   state.typingTimer = setInterval(() => {
     if (i >= text.length) {
       clearInterval(state.typingTimer);
@@ -154,8 +154,9 @@ function startQuest(index) {
   playerLevel.textContent = state.level;
   messageSpeaker.textContent = '🧙 ことだま の せいれい';
 
-  // エディタを初期化
-  codeEditor.value = quest.initialCode;
+  // エディタを初期化（書きかけの下書きがあれば復元）
+  const draft = KOTODAMA.loadDraft('html', state.mode, index);
+  codeEditor.value = draft || quest.initialCode;
   codeEditor.placeholder = quest.placeholder || '';
   updatePreview();
 
@@ -196,9 +197,10 @@ function updatePreview() {
   doc.close();
 }
 
-// エディタ入力中もリアルタイムプレビュー
+// エディタ入力中もリアルタイムプレビュー＋下書きの自動保存
 codeEditor.addEventListener('input', () => {
   updatePreview();
+  KOTODAMA.saveDraft('html', state.mode, state.currentQuest, codeEditor.value, questSet()[state.currentQuest].initialCode);
 });
 
 // ----- クリアの記録 -----
@@ -228,20 +230,23 @@ function castSpell() {
   if (quest.check(code)) {
     // 成功！
     recordClear(state.currentQuest, code);
+    KOTODAMA.recordSuccess('html', state.mode, state.currentQuest);
+    KOTODAMA.clearDraft('html', state.mode, state.currentQuest);
     setTimeout(() => playSuccessSound(), 100);
     messageSpeaker.textContent = '🧙 ことだま の せいれい';
     showMessage(quest.successMessage, () => {
       setTimeout(() => showClearModal(quest), 1200);
     });
   } else {
-    // 失敗：どこが違うかを具体的に伝える
+    // 失敗：どこが違うかを具体的に伝える（連続失敗なら励ましも）
     playErrorSound();
     messageSpeaker.textContent = '🧙 ことだま の せいれい';
     const problem = quest.diagnose ? quest.diagnose(code) : null;
+    const cheer = KOTODAMA.recordMistake('html', state.mode, state.currentQuest, quest.title);
     if (problem) {
-      showMessage("むむ… " + problem + "\n（こまったら「💡 ヒント」じゃ）");
+      showMessage("むむ… " + problem + "\n（こまったら「💡 ヒント」じゃ）" + cheer);
     } else {
-      showMessage("むむ… まだ ことだまが\nととのっておらんようじゃ。\n「💡 ヒント」を みてみるのじゃ。");
+      showMessage("むむ… まだ ことだまが\nととのっておらんようじゃ。\n「💡 ヒント」を みてみるのじゃ。" + cheer);
     }
   }
 }

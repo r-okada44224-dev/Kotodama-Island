@@ -82,7 +82,7 @@ function ensureAudio() {
   }
 }
 function beep(freq=440, dur=0.08, type='square', vol=0.05) {
-  if (!audioCtx) return;
+  if (!audioCtx || !KOTODAMA.soundOn()) return;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.type = type; osc.frequency.value = freq; gain.gain.value = vol;
@@ -115,7 +115,7 @@ function showMessage(text, onComplete) {
     messageText.textContent += ch;
     if (ch !== '\n' && ch !== ' ' && i % 3 === 0) playType();
     i++;
-  }, 28);
+  }, KOTODAMA.adjustSpeed(28));
 }
 function skipTyping() {
   if (!state.isTyping) return;
@@ -133,7 +133,10 @@ function updateLineNumbers() {
   const lines = codeEditor.value.split('\n').length;
   lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('<br>');
 }
-codeEditor.addEventListener('input', updateLineNumbers);
+codeEditor.addEventListener('input', () => {
+  updateLineNumbers();
+  KOTODAMA.saveDraft('js', state.mode, state.currentQuest, codeEditor.value, questSet()[state.currentQuest].initialCode);
+});
 codeEditor.addEventListener('scroll', () => {
   lineNumbers.scrollTop = codeEditor.scrollTop;
 });
@@ -245,7 +248,9 @@ function startQuest(index) {
   playerLevel.textContent = state.level;
   messageSpeaker.textContent = '🧙 ことだま の せいれい';
 
-  codeEditor.value = quest.initialCode;
+  // エディタを初期化（書きかけの下書きがあれば復元）
+  const draft = KOTODAMA.loadDraft('js', state.mode, index);
+  codeEditor.value = draft || quest.initialCode;
   codeEditor.placeholder = quest.placeholder || '';
   updateLineNumbers();
 
@@ -287,13 +292,16 @@ function castSpell() {
   if (result.hasError) {
     playError();
     messageSpeaker.textContent = '🧙 ことだま の せいれい';
-    showMessage("むむ… コードに まちがいが あるようじゃ。\n右がわの エラーメッセージを みてみよ。\n「💡 ヒント」も つかえるぞ。");
+    const cheer = KOTODAMA.recordMistake('js', state.mode, state.currentQuest, quest.title);
+    showMessage("むむ… コードに まちがいが あるようじゃ。\n右がわの エラーメッセージを みてみよ。\n「💡 ヒント」も つかえるぞ。" + cheer);
     return;
   }
 
   // クエスト判定
   if (quest.check(code, state.lastOutput)) {
     recordClear(state.currentQuest);
+    KOTODAMA.recordSuccess('js', state.mode, state.currentQuest);
+    KOTODAMA.clearDraft('js', state.mode, state.currentQuest);
     setTimeout(() => playSuccess(), 100);
     messageSpeaker.textContent = '🧙 ことだま の せいれい';
     showMessage(quest.successMessage, () => {
@@ -303,10 +311,11 @@ function castSpell() {
     playError();
     messageSpeaker.textContent = '🧙 ことだま の せいれい';
     const problem = quest.diagnose ? quest.diagnose(code, state.lastOutput) : null;
+    const cheer = KOTODAMA.recordMistake('js', state.mode, state.currentQuest, quest.title);
     if (problem) {
-      showMessage("コードは うごいたが… " + problem + "\n（こまったら「💡 ヒント」じゃ）");
+      showMessage("コードは うごいたが… " + problem + "\n（こまったら「💡 ヒント」じゃ）" + cheer);
     } else {
-      showMessage("コードは うごいたが、\nまだ ぜんぶの じょうけんが\nそろっていないようじゃ。\n「💡 ヒント」を みてみよ。");
+      showMessage("コードは うごいたが、\nまだ ぜんぶの じょうけんが\nそろっていないようじゃ。\n「💡 ヒント」を みてみよ。" + cheer);
     }
   }
 }
