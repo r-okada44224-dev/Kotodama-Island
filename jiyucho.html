@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>じゆうちょう ～ことだまの島～</title>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Yusei+Magic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* じゆうちょう専用の調整 */
+    #jiyucho-screen {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+    }
+    .jiyucho-bar {
+      border-bottom-color: #ff9de2;
+    }
+    .jiyucho-bar .bar-title {
+      color: #ff9de2;
+      font-size: 16px;
+    }
+    .jiyucho-btn {
+      background: #2a0a22;
+      border-color: #ff9de2;
+      color: #ff9de2;
+    }
+    .jiyucho-btn:hover {
+      background: #3d0d32;
+      box-shadow: 0 6px 0 #000, 0 0 12px rgba(255, 157, 226, 0.3);
+    }
+    #template-select {
+      font-family: inherit;
+      font-size: 13px;
+      background: #1a1a3a;
+      color: #fff;
+      border: 2px solid #999;
+      border-radius: 6px;
+      padding: 6px 8px;
+      cursor: pointer;
+    }
+    .jiyucho-tip {
+      padding: 8px 16px;
+      background: #000;
+      border-top: 2px solid #ff9de2;
+      font-size: 13px;
+      color: #ffc9ef;
+      line-height: 1.6;
+    }
+    #code-editor {
+      color: #ffe3f6;
+    }
+  </style>
+</head>
+<body>
+
+  <section id="jiyucho-screen">
+
+    <!-- 上部バー -->
+    <header class="status-bar jiyucho-bar">
+      <span class="bar-title">✏️ じゆうちょう（すきな ページを つくる ばしょ）</span>
+      <select id="template-select" title="テンプレートから はじめる">
+        <option value="">📄 テンプレート…</option>
+        <option value="blank">まっしろな まきもの</option>
+        <option value="profile">じこしょうかいページ</option>
+        <option value="app">うごくボタンの ページ</option>
+      </select>
+      <span class="quest-title-display"></span>
+      <button id="run-button" class="dq-button small jiyucho-btn">✨ うごかす</button>
+      <button id="download-button" class="dq-button small jiyucho-btn">💾 もちかえる</button>
+      <a href="taizen.html" class="dq-button small gray" style="text-decoration:none;">📖 大全</a>
+      <a href="index.html" class="dq-button small gray" style="text-decoration:none;">🏠 もどる</a>
+    </header>
+
+    <!-- メイン2分割 -->
+    <main class="main-area">
+      <article class="panel editor-panel">
+        <div class="panel-header" style="color:#ff9de2;">📜 まきもの（HTML・CSS・JS なんでも かける）</div>
+        <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+      </article>
+      <article class="panel preview-panel">
+        <div class="panel-header" style="color:#ff9de2;">✨ じったいかした せかい</div>
+        <iframe id="preview-frame" title="プレビュー"></iframe>
+      </article>
+    </main>
+
+    <!-- 下部ヒント -->
+    <footer class="jiyucho-tip">
+      💡 かくと すぐ みためが かわるぞ。&lt;script&gt;（JSの まほう）は「✨ うごかす」（Ctrl+Enter）を おすと うごく。
+      かいた ものは じどうで ほぞんされ、「💾 もちかえる」で ほんものの HTMLファイルに できるのじゃ。
+    </footer>
+
+  </section>
+
+  <script src="js/jiyucho.js"></script>
+</body>
+</html>

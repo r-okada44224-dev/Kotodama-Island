@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ことだま大全 ～まなびのチートシート～</title>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Yusei+Magic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* 大全は縦スクロールするページ */
+    html, body {
+      overflow-y: auto;
+      height: auto;
+      background: #050816;
+    }
+    .taizen-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .taizen-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .taizen-title {
+      font-size: clamp(28px, 5vw, 44px);
+      color: #ffe27a;
+      text-shadow: 3px 3px 0 #000, 0 0 24px rgba(255,226,122,0.4);
+      margin-bottom: 8px;
+    }
+    .taizen-sub {
+      color: #b8c7ff;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+    .taizen-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .taizen-section {
+      margin-bottom: 32px;
+    }
+    .taizen-chapter-title {
+      font-size: 20px;
+      padding: 10px 16px;
+      border: 2px solid;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      background: rgba(0,0,0,0.4);
+    }
+    .taizen-count {
+      font-size: 13px;
+      color: #999;
+      margin-left: 10px;
+    }
+    .taizen-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 700px) {
+      .taizen-grid { grid-template-columns: 1fr; }
+    }
+    .taizen-entry {
+      background: #0d1124;
+      border: 2px solid #444;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .taizen-entry .t-name {
+      font-size: 16px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    .taizen-entry .t-desc {
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: #ccc;
+      white-space: pre-wrap;
+    }
+    .taizen-entry.locked {
+      opacity: 0.5;
+    }
+    .taizen-entry.locked .t-name { color: #888; }
+    /* にがてメモ */
+    .nigate-box {
+      background: #1a1024;
+      border: 2px solid #ff9d7a;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 32px;
+    }
+    .nigate-title {
+      color: #ff9d7a;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .nigate-box ul { list-style: none; }
+    .nigate-box li {
+      font-size: 14px;
+      color: #eee;
+      padding: 5px 0;
+      border-bottom: 1px dashed rgba(255,157,122,0.3);
+    }
+    .nigate-box li:last-child { border-bottom: none; }
+    .nigate-count { color: #ff9d7a; font-weight: bold; }
+    .nigate-note { font-size: 12px; color: #aaa; margin-top: 10px; line-height: 1.7; }
+    .nigate-empty { font-size: 14px; color: #aaa; }
+    .taizen-footer {
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      border-top: 1px solid #333;
+      padding-top: 18px;
+    }
+    /* 印刷用：白背景・黒文字・ボタン非表示 */
+    @media print {
+      html, body { background: #fff !important; color: #000 !important; }
+      .taizen-buttons, .nigate-box { display: none !important; }
+      .taizen-title { color: #000 !important; text-shadow: none !important; }
+      .taizen-sub, .taizen-count { color: #555 !important; }
+      .taizen-chapter-title { color: #000 !important; background: #fff !important; border-color: #000 !important; }
+      .taizen-entry { background: #fff !important; border-color: #999 !important; break-inside: avoid; }
+      .taizen-entry .t-name { color: #000 !important; }
+      .taizen-entry .t-desc { color: #333 !important; }
+      .taizen-entry.locked { display: none !important; }
+      .taizen-footer { color: #555 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="taizen-wrap">
+
+    <header class="taizen-header">
+      <h1 class="taizen-title">📖 ことだま大全</h1>
+      <p class="taizen-sub">クリアした クエストの「ことだま」を ぜんぶ ここで 見返せるぞ。いんさつも できるのじゃ。</p>
+      <div class="taizen-buttons">
+        <button id="print-button" class="dq-button small">🖨 いんさつする</button>
+        <a href="index.html" class="dq-button small gray" style="text-decoration:none;">🏠 まなびの地図へ</a>
+      </div>
+    </header>
+
+    <!-- にがてメモ（まちがい記録から自動生成） -->
+    <section id="nigate-section" class="nigate-box" hidden>
+      <h2 class="nigate-title">🔥 にがてメモ ～よく つまずいた もんだい～</h2>
+      <ul id="nigate-list"></ul>
+      <p class="nigate-note">つまずいた かずが おおい もんだいじゃ。その章の「🔥 とっくんモード」で ふくしゅうすると ちからに なるぞ。</p>
+    </section>
+
+    <!-- 各章の図鑑（スクリプトで生成） -->
+    <main id="taizen-main"></main>
+
+    <footer class="taizen-footer">
+      <p>ことだまの島 ～まなびの地図～ ／ この大全は あなたの ぼうけんの きろくから 自動で つくられています</p>
+    </footer>
+
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/quests.js"></script>
+  <script src="js/css-quests.js"></script>
+  <script src="js/js-quests.js"></script>
+  <script src="js/dom-quests.js"></script>
+  <script>
+    const CHAPTERS = [
+      { id: 'html', name: '第0章 HTMLはじまりの章', icon: '📜', color: '#ffe27a', quests: QUESTS,      saveKey: 'kotodama_html_v1', clearedField: 'clearedMain' },
+      { id: 'css',  name: '第1章 いろをぬる章',     icon: '🎨', color: '#c07aff', quests: CSS_QUESTS,  saveKey: 'kotodama_css_v1',  clearedField: 'cleared' },
+      { id: 'js',   name: '第2章 うごきを あたえる章', icon: '⚡', color: '#7dffb3', quests: JS_QUESTS, saveKey: 'kotodama_js_v1',   clearedField: 'cleared' },
+      { id: 'dom',  name: '第3章 ページを あやつる章', icon: '🪄', color: '#7ad9ff', quests: DOM_QUESTS, saveKey: 'kotodama_dom_v1', clearedField: 'cleared' }
+    ];
+
+    function readSave(key) {
+      try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { return {}; }
+    }
+
+    /* ----- 各章の図鑑を描画 ----- */
+    const main = document.getElementById('taizen-main');
+    CHAPTERS.forEach((ch) => {
+      const cleared = readSave(ch.saveKey)[ch.clearedField] || 0;
+
+      const section = document.createElement('section');
+      section.className = 'taizen-section';
+
+      const title = document.createElement('h2');
+      title.className = 'taizen-chapter-title';
+      title.style.color = ch.color;
+      title.style.borderColor = ch.color;
+      title.innerHTML = '';
+      title.textContent = `${ch.icon} ${ch.name}`;
+      const count = document.createElement('span');
+      count.className = 'taizen-count';
+      count.textContent = `（${Math.min(cleared, ch.quests.length)} / ${ch.quests.length} かいきん）`;
+      title.appendChild(count);
+      section.appendChild(title);
+
+      const grid = document.createElement('div');
+      grid.className = 'taizen-grid';
+      ch.quests.forEach((quest, i) => {
+        const unlocked = i < cleared;
+        const entry = document.createElement('div');
+        entry.className = 'taizen-entry' + (unlocked ? '' : ' locked');
+        entry.style.borderColor = unlocked ? ch.color : '#444';
+
+        const name = document.createElement('div');
+        name.className = 't-name';
+        name.style.color = unlocked ? ch.color : '#888';
+        const desc = document.createElement('div');
+        desc.className = 't-desc';
+
+        if (unlocked) {
+          name.textContent = quest.reveal.name;
+          desc.textContent = quest.reveal.desc;
+        } else {
+          name.textContent = '？？？';
+          desc.textContent = `クエスト${i + 1}「${quest.title}」を クリアすると きろくされるぞ。`;
+        }
+        entry.appendChild(name);
+        entry.appendChild(desc);
+        grid.appendChild(entry);
+      });
+      section.appendChild(grid);
+      main.appendChild(section);
+    });
+
+    /* ----- にがてメモを描画 ----- */
+    (function renderNigate() {
+      const all = KOTODAMA.getMistakes();
+      const rows = [];
+      CHAPTERS.forEach((ch) => {
+        const perChapter = all[ch.id] || {};
+        Object.keys(perChapter).forEach((key) => {
+          const rec = perChapter[key];
+          if (!rec || rec.n < 2) return; // 2回以上つまずいたものだけ
+          const [mode, idx] = key.split(':');
+          rows.push({
+            chapter: ch,
+            label: (mode === 'review' ? 'とっくん' : 'クエスト' + (parseInt(idx, 10) + 1)),
+            title: rec.title || '',
+            n: rec.n
+          });
+        });
+      });
+      if (rows.length === 0) return;
+
+      rows.sort((a, b) => b.n - a.n);
+      const list = document.getElementById('nigate-list');
+      rows.slice(0, 8).forEach((row) => {
+        const li = document.createElement('li');
+        li.textContent = `${row.chapter.icon} ${row.chapter.name}・${row.label}「${row.title}」 … `;
+        const n = document.createElement('span');
+        n.className = 'nigate-count';
+        n.textContent = `つまずき ${row.n}回`;
+        li.appendChild(n);
+        list.appendChild(li);
+      });
+      document.getElementById('nigate-section').hidden = false;
+    })();
+
+    document.getElementById('print-button').addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>
