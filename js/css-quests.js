@@ -472,3 +472,84 @@ const CSS_REVIEW_QUESTS = [
 CSS_REVIEW_QUESTS.forEach((q) => {
   q.check = (code) => q.diagnose(code) === null;
 });
+
+/* ========================================
+   本編クエストへの diagnose 後付け
+   合否判定（check）はそのまま、不正解のとき
+   「どこが違うか」を返す（null なら一般メッセージ）
+   ======================================== */
+const CSS_MAIN_DIAGNOSE = [
+  // Q1: <style>タグ
+  (code) => {
+    const c = code.toLowerCase();
+    if (code.trim().length === 0) return "まだ なにも かかれておらんぞ。";
+    if (!c.includes('<style')) return "はじまりの <style> が みつからないぞ。";
+    if (!c.includes('</style>')) return "おわりの </style> が みつからないぞ。\n「/」（スラッシュ）を わすれておらんか？";
+    return null;
+  },
+  // Q2: color
+  (code) => {
+    const h1 = cssBlock(code, 'h1');
+    if (h1 === null) return "h1 { } の かたちが みつからないぞ。\n{ }（なみかっこ）で かこむのじゃ。";
+    if (!h1.includes('color:')) return "h1 の { } の中に color: が みつからないぞ。\n（color の あとの「:」も わすれずに）";
+    if (!(h1.includes('red') || h1.includes('#') || h1.includes('rgb'))) return "color: の みぎに いろを かくのじゃ。\n（red / blue など）";
+    return null;
+  },
+  // Q3: background-color
+  (code) => {
+    const body = cssBlock(code, 'body');
+    if (body === null) return "body { } の かたちが みつからないぞ。";
+    if (!body.includes('background-color:')) return "body の { } の中に background-color: が みつからないぞ。\n（ながい ことばじゃ、うちまちがいに ちゅうい！）";
+    if (/background-color:(;|$)/.test(body)) return "background-color: の みぎに いろを かくのじゃ。\n（lightyellow など）";
+    return null;
+  },
+  // Q4: font-size
+  (code) => {
+    const p = cssBlock(code, 'p');
+    if (p === null) return "p { } の かたちが みつからないぞ。";
+    if (!p.includes('font-size:')) return "p の { } の中に font-size: が みつからないぞ。";
+    if (!/font-size:\d+px/.test(p)) return "大きさは「数字＋px」で かくのじゃ。\n（例：font-size: 20px;）";
+    return null;
+  },
+  // Q5: text-align
+  (code) => {
+    const h1 = cssBlock(code, 'h1');
+    if (h1 === null) return "h1 { } の かたちが みつからないぞ。";
+    if (!h1.includes('color:')) return "color: red; は のこしたまま\nくわえるのじゃぞ。";
+    if (!h1.includes('text-align:center')) return "text-align: center; が みつからないぞ。\n（つづりに ちゅうい：text-align）";
+    return null;
+  },
+  // Q6: padding
+  (code) => {
+    const p = cssBlock(code, 'p');
+    if (p === null) return "p { } の かたちが みつからないぞ。";
+    if (!p.includes('padding:')) return "p の { } の中に padding: が みつからないぞ。";
+    if (!/padding:\d+px/.test(p)) return "すきまも「数字＋px」で かくのじゃ。\n（例：padding: 10px;）";
+    return null;
+  },
+  // Q7: クラスセレクタ
+  (code) => {
+    const sp = cssBlock(code, '.special');
+    if (sp === null) return ".special { } の かたちが みつからないぞ。\n「.」（ドット）から はじめるのが ポイントじゃ。";
+    if (!sp.includes('color:')) return ".special の { } の中に color: blue; を かくのじゃ。";
+    if (!sp.includes('font-weight:bold')) return "font-weight: bold; も くわえるのじゃ。\n（ふとくする まほうじゃ）";
+    return null;
+  },
+  // Q8: ボス
+  (code) => {
+    const h1 = cssBlock(code, 'h1');
+    if (h1 === null) return "h1 { } の ルールが みつからないぞ。";
+    if (!h1.includes('color:') || /color:(;|$)/.test(h1)) return "① h1 の color（文字色）を かくのじゃ。";
+    if (!h1.includes('text-align:center')) return "③ h1 に text-align: center; を くわえるのじゃ。";
+    const body = cssBlock(code, 'body');
+    if (body === null || !body.includes('background-color:')) return "② body の background-color（背景色）を かくのじゃ。";
+    const p = cssBlock(code, 'p');
+    if (p === null) return "p { } の ルールが みつからないぞ。";
+    if (!/font-size:\d+px/.test(p)) return "④ p の font-size（数字＋px）を かくのじゃ。";
+    if (!/padding:\d+px/.test(p)) return "⑤ p の padding（数字＋px）を かくのじゃ。";
+    return null;
+  }
+];
+CSS_QUESTS.forEach((q, i) => {
+  if (CSS_MAIN_DIAGNOSE[i]) q.diagnose = CSS_MAIN_DIAGNOSE[i];
+});

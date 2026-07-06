@@ -245,7 +245,8 @@ const JS_QUESTS = [
              code.includes('{') &&
              code.includes('}') &&
              code.includes('console.log(') &&
-             code.match(/\w+\s*\(\s*\)\s*;/) !== null &&
+             // 関数の呼び出し（日本語の関数名にも対応）
+             code.match(/[\w぀-ヿ一-鿿]+\s*\(\s*\)\s*;/) !== null &&
              output.trim().length > 0;
     },
     hint: 'こう かくのじゃ：\n\nfunction あいさつ() {\n  console.log("こんにちは！");\n}\n\nあいさつ();\nあいさつ();\n\n2回 よびだすと\n2行 ひょうじされるはずじゃ。',
@@ -389,4 +390,102 @@ const JS_REVIEW_QUESTS = [
 /* diagnose から check を自動生成（合格 ＝ diagnose が null） */
 JS_REVIEW_QUESTS.forEach((q) => {
   q.check = (code, output) => q.diagnose(code, output) === null;
+});
+
+/* ========================================
+   本編クエストへの diagnose 後付け
+   合否判定（check）はそのまま、不正解のとき
+   「どこが違うか」を返す（null なら一般メッセージ）
+   ======================================== */
+const JS_MAIN_DIAGNOSE = [
+  // Q1: console.log
+  (code, output) => {
+    if (code.trim().length === 0) return "まだ なにも かかれておらんぞ。";
+    if (!code.includes('console.log(')) return "console.log( ) の じゅもんが みつからないぞ。\n（つづりと 小文字/大文字に ちゅうい）";
+    if (!code.includes(')')) return "とじる ) を わすれておるぞ。";
+    if (output.trim().length === 0) return "なにも ひょうじされておらんぞ。\n( ) の中に \"ことば\" を いれたか たしかめよ。";
+    return null;
+  },
+  // Q2: 変数
+  (code, output) => {
+    if (!code.includes('let ')) return "let で ことだま石（変数）を つくるのじゃ。\n（let の あとに 半角スペースじゃぞ）";
+    if (!code.includes('=')) return "= で 石に ことばを いれるのじゃ。\n（例：let なまえ = \"勇者\";）";
+    if (!code.includes('console.log(')) return "石の 中身は console.log(なまえ); で ひょうじするのじゃ。";
+    if (output.trim().length === 0) return "なにも ひょうじされておらんぞ。\nconsole.log の ( ) に 変数名を いれたか？";
+    return null;
+  },
+  // Q3: 計算
+  (code, output) => {
+    if (!code.includes('let ')) return "let で 変数を つくるのじゃ。";
+    if (!(code.includes('+') || code.includes('-') || code.includes('*') || code.includes('/'))) return "+ - * / の どれかで けいさんするのじゃ。";
+    if (!code.includes('console.log(')) return "こたえは console.log で ひょうじするのじゃ。";
+    if (output.trim().length === 0) return "なにも ひょうじされておらんぞ。";
+    if (isNaN(output.trim().split('\n')[0])) return "さいしょの ひょうじが「かず」に なっておらんぞ。\nconsole.log(ごうけい); のように\n数の 変数を ひょうじするのじゃ。";
+    return null;
+  },
+  // Q4: テンプレートリテラル
+  (code, output) => {
+    if (!code.includes('`')) return "`（バッククォート）が みつからないぞ。\nキーボード左上、' や \" とは べつの きごうじゃ。";
+    if (!code.includes('${')) return "変数は ${変数名} の かたちで\n文の 中に うめこむのじゃ。";
+    if (!code.includes('console.log(')) return "console.log で ひょうじするのじゃ。";
+    if (output.trim().length === 0) return "なにも ひょうじされておらんぞ。";
+    return null;
+  },
+  // Q5: if文
+  (code, output) => {
+    if (!(code.includes('if ') || code.includes('if('))) return "「もし〜ならば」は if じゃ。\nif (HP > 0) { … } の かたちじゃぞ。";
+    if (!code.includes('{') || !code.includes('}')) return "if の あとは { } で かこむのじゃ。";
+    if (!code.includes('console.log(')) return "それぞれの みちで console.log を となえるのじゃ。";
+    if (output.trim().length === 0) return "なにも ひょうじされておらんぞ。\n{ } の中の console.log を たしかめよ。";
+    return null;
+  },
+  // Q6: for文
+  (code, output) => {
+    if (!code.includes('for')) return "くりかえしは for じゃ。\nfor (let i = 1; i <= 5; i++) { … }";
+    if (!code.includes('let i')) return "( ) の中は let i = 1 から はじめるのじゃ。";
+    if (!code.includes('console.log(')) return "くりかえす まほうは console.log じゃ。";
+    const lines = output.trim().length === 0 ? 0 : output.trim().split('\n').length;
+    if (lines < 3) return `ひょうじが ${lines}行しか ないぞ。\n5回 くりかえせば 5行 でるはずじゃ。\n（i <= 5 に なっておるか？）`;
+    return null;
+  },
+  // Q7: 配列
+  (code, output) => {
+    if (!code.includes('[') || !code.includes(']')) return "なかまは [ ]（かくかっこ）に いれるのじゃ。";
+    if (!code.includes('console.log(')) return "なかま[0] などを console.log で ひょうじするのじゃ。";
+    const lines = output.trim().length === 0 ? 0 : output.trim().split('\n').length;
+    if (lines < 2) return `ひょうじが ${lines}行しか ないぞ。\nなかま[0]、なかま[1]… と\n2人いじょう ひょうじするのじゃ。`;
+    return null;
+  },
+  // Q8: for×配列
+  (code, output) => {
+    if (!code.includes('for')) return "for文で くりかえすのじゃ。";
+    if (!code.includes('.length')) return "くりかえす かいすうは なかま.length じゃ。\n（なかまの 数だけ くりかえす）";
+    if (!code.includes('console.log(')) return "console.log で よびかけるのじゃ。";
+    const lines = output.trim().length === 0 ? 0 : output.trim().split('\n').length;
+    if (lines < 3) return `ひょうじが ${lines}行しか ないぞ。\nなかま ぜんいん（3人）に よびかけるのじゃ。\n（i < なかま.length に なっておるか？）`;
+    return null;
+  },
+  // Q9: 関数
+  (code, output) => {
+    if (!code.includes('function ')) return "function で まほうを つくるのじゃ。\n（function の あとに 半角スペース）";
+    if (!code.includes('{') || !code.includes('}')) return "やることは { } の中に かくのじゃ。";
+    if (!code.includes('console.log(')) return "{ } の中で console.log を となえるのじゃ。";
+    if (code.match(/[\w぀-ヿ一-鿿]+\s*\(\s*\)\s*;/) === null) return "つくった まほうを よびだしておらんぞ。\nさいごに 関数名(); で よびだすのじゃ。";
+    if (output.trim().length === 0) return "なにも ひょうじされておらんぞ。\nよびだしの 行（あいさつ(); など）は あるか？";
+    return null;
+  },
+  // Q10: ボス
+  (code, output) => {
+    if (!code.includes('let ')) return "① let で HPと こうげき力を つくるのじゃ。";
+    if (!code.includes('function ')) return "② function で「こうげき」の まほうを つくるのじゃ。";
+    if (!(code.includes('if ') || code.includes('if('))) return "③ if文で「HPが 0以下なら たおれた」を つくるのじゃ。";
+    if (!(code.includes('for ') || code.includes('for('))) return "④ for文で「3ターン たたかう」を つくるのじゃ。";
+    if (!code.includes('console.log(')) return "ダメージや HPは console.log で ひょうじするのじゃ。";
+    const lines = output.trim().length === 0 ? 0 : output.trim().split('\n').length;
+    if (lines < 2) return "ひょうじが すくないぞ。\nfor文の 中で こうげき(); を よびだしておるか？";
+    return null;
+  }
+];
+JS_QUESTS.forEach((q, i) => {
+  if (JS_MAIN_DIAGNOSE[i]) q.diagnose = JS_MAIN_DIAGNOSE[i];
 });
