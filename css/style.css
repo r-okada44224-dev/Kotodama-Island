@@ -412,6 +412,24 @@ html, body {
   color: #999;
 }
 
+/* キーボード操作時のフォーカスを見やすく */
+.dq-button:focus-visible,
+.nav-link:focus-visible,
+.next-arrow:focus-visible,
+#code-editor:focus-visible {
+  outline: 3px solid #ffe27a;
+  outline-offset: 2px;
+}
+
+/* アニメーションを減らす設定の人には演出を止める */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* レスポンシブ */
 @media (max-width: 900px) {
   .main-area {
