@@ -226,6 +226,27 @@ body::before {
   background: #0a1f2e;
 }
 
+/* 第4章カード（レイアウト編・オレンジ） */
+.layout-card {
+  border-color: #ffb27a;
+  box-shadow: 0 0 20px rgba(255, 178, 122, 0.2);
+}
+.layout-card:hover {
+  box-shadow: 0 8px 32px rgba(255, 178, 122, 0.4);
+}
+.layout-badge {
+  color: #ffb27a !important;
+  border-color: #ffb27a !important;
+}
+.layout-card-title {
+  color: #ffb27a !important;
+}
+.layout-card-start {
+  color: #ffb27a !important;
+  border-color: #ffb27a !important;
+  background: #2e1a0a;
+}
+
 /* クリア進捗バッジ */
 .card-progress {
   display: inline-block;

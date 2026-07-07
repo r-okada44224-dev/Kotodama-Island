@@ -15,11 +15,13 @@ document.querySelectorAll('.chapter-card.locked').forEach(card => {
 });
 
 // 各章のクリア状況をカードに表示
+// core: true の章が「本編 Code of History」の解放条件（従来どおり4章）
 const CHAPTER_PROGRESS = [
-  { key: 'kotodama_html_v1', selector: '.html-card',    total: 10, field: 'clearedMain' },
-  { key: 'kotodama_css_v1',  selector: '.css-card',     total: 8,  field: 'cleared' },
-  { key: 'kotodama_js_v1',   selector: '.js-card-open', total: 10, field: 'cleared' },
-  { key: 'kotodama_dom_v1',  selector: '.dom-card',     total: 10, field: 'cleared' }
+  { key: 'kotodama_html_v1',   selector: '.html-card',    total: 10, field: 'clearedMain', core: true },
+  { key: 'kotodama_css_v1',    selector: '.css-card',     total: 8,  field: 'cleared',     core: true },
+  { key: 'kotodama_js_v1',     selector: '.js-card-open', total: 10, field: 'cleared',     core: true },
+  { key: 'kotodama_dom_v1',    selector: '.dom-card',     total: 10, field: 'cleared',     core: true },
+  { key: 'kotodama_layout_v1', selector: '.layout-card',  total: 8,  field: 'cleared',     core: false }
 ];
 CHAPTER_PROGRESS.forEach(({ key, selector, total, field }) => {
   const card = document.querySelector(selector);
@@ -49,7 +51,8 @@ CHAPTER_PROGRESS.forEach(({ key, selector, total, field }) => {
 // 全4章のクエストをクリアすると とびらが ひらく
 const honhenCard = document.getElementById('honhen-card');
 if (honhenCard) {
-  const clearedChapters = CHAPTER_PROGRESS.filter(({ key, total, field }) => {
+  const coreChapters = CHAPTER_PROGRESS.filter(c => c.core);
+  const clearedChapters = coreChapters.filter(({ key, total, field }) => {
     let save = {};
     try { save = JSON.parse(localStorage.getItem(key)) || {}; } catch (e) {}
     return (save[field] || 0) >= total;
@@ -57,7 +60,7 @@ if (honhenCard) {
 
   const message = document.getElementById('honhen-message');
   const start = document.getElementById('honhen-start');
-  if (clearedChapters >= CHAPTER_PROGRESS.length) {
+  if (clearedChapters >= coreChapters.length) {
     honhenCard.classList.remove('locked');
     honhenCard.classList.add('unlocked');
     if (message) message.textContent = '👑 4つの ことだまが そろった！ とびらが ひらいたぞ…！';

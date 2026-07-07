@@ -204,6 +204,19 @@ window.KOTODAMA = (function () {
   border: 1px solid #666; border-radius: 6px; cursor: pointer;
 }
 .kotodama-quickbar button:active { background: #2a3a6a; }
+/* --- 図鑑のMDN案内 --- */
+.zukan-mdn-note {
+  font-size: 12.5px;
+  color: #b8c7ff;
+  line-height: 1.8;
+  background: rgba(122, 217, 255, 0.08);
+  border: 1px dashed rgba(122, 217, 255, 0.5);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+.zukan-mdn-note a { color: #7ad9ff; }
 `;
     document.head.appendChild(style);
   }
@@ -334,6 +347,7 @@ window.KOTODAMA = (function () {
     const srcs = Array.from(document.scripts).map(s => s.getAttribute('src') || '');
     if (srcs.some(s => s.includes('jiyucho'))) return 'mixed';
     if (srcs.some(s => s.includes('css-main'))) return 'css';
+    if (srcs.some(s => s.includes('layout-main'))) return 'css';
     if (srcs.some(s => s.includes('js-main'))) return 'js';
     if (srcs.some(s => s.includes('dom-main'))) return 'js';
     if (srcs.some(s => s.includes('main.js'))) return 'html';
@@ -426,10 +440,25 @@ window.KOTODAMA = (function () {
   /* ========================================
      初期化
      ======================================== */
+  // 図鑑モーダルの下部に「調べ方の案内」を足す
+  function injectMdnNote() {
+    const content = document.querySelector('#zukan-modal .zukan-content');
+    const closeBtn = document.getElementById('zukan-close-button');
+    if (!content || !closeBtn) return;
+    const note = document.createElement('p');
+    note.className = 'zukan-mdn-note';
+    note.innerHTML = '🔍 ここに ない ことだまに であったら、'
+      + '「<a href="https://developer.mozilla.org/ja/" target="_blank" rel="noopener">MDN</a>'
+      + '　しらべたい ことば」で けんさくするのじゃ。'
+      + 'ぜんぶ おぼえなくて よい。しらべられれば よいのじゃ。';
+    content.insertBefore(note, closeBtn);
+  }
+
   function init() {
     injectStyles();
     injectSettingsButtons();
     watchModalsForCelebration();
+    injectMdnNote();
 
     const editor = document.getElementById('code-editor');
     if (editor) {

@@ -108,6 +108,38 @@
     .nigate-count { color: #ff9d7a; font-weight: bold; }
     .nigate-note { font-size: 12px; color: #aaa; margin-top: 10px; line-height: 1.7; }
     .nigate-empty { font-size: 14px; color: #aaa; }
+    /* 調べ方のこころえ */
+    .shirabe-box {
+      background: #0a1a24;
+      border: 2px solid #7ad9ff;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 32px;
+    }
+    .shirabe-title {
+      color: #7ad9ff;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .shirabe-text {
+      font-size: 14px;
+      color: #ddd;
+      line-height: 1.9;
+      margin-bottom: 12px;
+    }
+    .shirabe-list { list-style: none; }
+    .shirabe-list li {
+      font-size: 13.5px;
+      color: #ccc;
+      line-height: 1.8;
+      padding: 4px 0;
+    }
+    .shirabe-list a { color: #7ad9ff; }
+    @media print {
+      .shirabe-box { background: #fff !important; border-color: #000 !important; }
+      .shirabe-title { color: #000 !important; }
+      .shirabe-text, .shirabe-list li { color: #333 !important; }
+    }
     .taizen-footer {
       text-align: center;
       color: #777;
@@ -152,6 +184,20 @@
     <!-- 各章の図鑑（スクリプトで生成） -->
     <main id="taizen-main"></main>
 
+    <!-- 調べ方のこころえ（MDN案内） -->
+    <section class="shirabe-box">
+      <h2 class="shirabe-title">🔍 しらべかたの こころえ ～ここから さきの あるきかた～</h2>
+      <p class="shirabe-text">
+        この大全に のっていない ことだまは、せかいに まだまだ たくさんある。<br>
+        じゃが あんしんせよ。<strong>ぜんぶ おぼえる ひつようは ない</strong>。ほんものの つくり手も、まいにち しらべながら かいておるのじゃ。
+      </p>
+      <ul class="shirabe-list">
+        <li>🔎 けんさくの じゅもんは「<strong>MDN しらべたいことば</strong>」——たとえば「MDN border-radius」「MDN video タグ」</li>
+        <li>📚 <a href="https://developer.mozilla.org/ja/" target="_blank" rel="noopener">MDN Web Docs</a> は、Webの ことだまが ぜんぶ のっている「せかい いちの だいとしょかん」じゃ</li>
+        <li>✏️ しらべたら、<a href="jiyucho.html">じゆうちょう</a>に はりつけて ためしてみるのじゃ。ためした ことだまだけが みに つく</li>
+      </ul>
+    </section>
+
     <footer class="taizen-footer">
       <p>ことだまの島 ～まなびの地図～ ／ この大全は あなたの ぼうけんの きろくから 自動で つくられています</p>
     </footer>
@@ -163,12 +209,14 @@
   <script src="js/css-quests.js"></script>
   <script src="js/js-quests.js"></script>
   <script src="js/dom-quests.js"></script>
+  <script src="js/layout-quests.js"></script>
   <script>
     const CHAPTERS = [
-      { id: 'html', name: '第0章 HTMLはじまりの章', icon: '📜', color: '#ffe27a', quests: QUESTS,      saveKey: 'kotodama_html_v1', clearedField: 'clearedMain' },
-      { id: 'css',  name: '第1章 いろをぬる章',     icon: '🎨', color: '#c07aff', quests: CSS_QUESTS,  saveKey: 'kotodama_css_v1',  clearedField: 'cleared' },
-      { id: 'js',   name: '第2章 うごきを あたえる章', icon: '⚡', color: '#7dffb3', quests: JS_QUESTS, saveKey: 'kotodama_js_v1',   clearedField: 'cleared' },
-      { id: 'dom',  name: '第3章 ページを あやつる章', icon: '🪄', color: '#7ad9ff', quests: DOM_QUESTS, saveKey: 'kotodama_dom_v1', clearedField: 'cleared' }
+      { id: 'html',   name: '第0章 HTMLはじまりの章', icon: '📜', color: '#ffe27a', quests: QUESTS,      saveKey: 'kotodama_html_v1', clearedField: 'clearedMain' },
+      { id: 'css',    name: '第1章 いろをぬる章',     icon: '🎨', color: '#c07aff', quests: CSS_QUESTS,  saveKey: 'kotodama_css_v1',  clearedField: 'cleared' },
+      { id: 'js',     name: '第2章 うごきを あたえる章', icon: '⚡', color: '#7dffb3', quests: JS_QUESTS, saveKey: 'kotodama_js_v1',   clearedField: 'cleared' },
+      { id: 'dom',    name: '第3章 ページを あやつる章', icon: '🪄', color: '#7ad9ff', quests: DOM_QUESTS, saveKey: 'kotodama_dom_v1', clearedField: 'cleared' },
+      { id: 'layout', name: '第4章 ならべる章',       icon: '📐', color: '#ffb27a', quests: LAYOUT_QUESTS, saveKey: 'kotodama_layout_v1', clearedField: 'cleared' }
     ];
 
     function readSave(key) {
